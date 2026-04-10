@@ -87,11 +87,10 @@ export default function Hero() {
             textShadow: '0 2px 40px rgba(0,0,0,0.5)',
           }}
         >
-          Hand-Cleaned.
+          Premium Skull Art.
           <br />
-          <span className="italic text-[#FAF7F2]">Artist-Painted.</span>
-          <br />
-          One of a Kind.
+          <span className="italic" style={{ color: '#B87333' }}>Hand-Cleaned.</span>
+          {' '}One of a Kind.
         </h1>
 
         {/* Sub-headline */}
