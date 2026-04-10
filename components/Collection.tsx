@@ -20,11 +20,10 @@ function SkullPlaceholder() {
     <div className="w-full h-full flex items-center justify-center bg-[#111]">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/images/emblem.jpeg"
+        src="/images/emblem.png"
         alt=""
         aria-hidden="true"
-        className="w-3/5 h-3/5 object-contain opacity-30"
-        style={{ mixBlendMode: 'screen' }}
+        className="w-1/2 h-1/2 object-contain opacity-20"
       />
     </div>
   )

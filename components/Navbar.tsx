@@ -45,10 +45,9 @@ export default function Navbar() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/bannerlogo.jpeg"
+            src="/images/logo.png"
             alt="Blackhorn Co."
             className="h-10 md:h-12 w-auto object-contain"
-            style={{ mixBlendMode: 'screen' }}
           />
         </button>
 

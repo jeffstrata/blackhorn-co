@@ -53,23 +53,21 @@ export default function Hero() {
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/emblem.jpeg"
+          src="/images/emblem.png"
           alt=""
-          className="w-[70vw] max-w-3xl opacity-[0.07]"
-          style={{ mixBlendMode: 'screen' }}
+          className="w-[65vw] max-w-2xl opacity-[0.06]"
         />
       </div>
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        {/* Banner logo — centerpiece */}
-        <div className="flex justify-center mb-8">
+        {/* Logo — centerpiece */}
+        <div className="flex justify-center mb-6">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/bannerlogo.jpeg"
+            src="/images/logo.png"
             alt="Blackhorn Co."
-            className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto"
-            style={{ mixBlendMode: 'screen' }}
+            className="w-48 sm:w-56 md:w-64 lg:w-72 h-auto"
           />
         </div>
 

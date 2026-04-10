@@ -11,10 +11,9 @@ export default function Footer() {
           <div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/logo.jpeg"
+              src="/images/logo.png"
               alt="Blackhorn Co."
               className="h-20 w-auto object-contain"
-              style={{ mixBlendMode: 'screen' }}
             />
             <p className="font-body text-[#A8A29E] text-sm mt-2">
               Hand-cleaned skull art from Alberta, Canada.
