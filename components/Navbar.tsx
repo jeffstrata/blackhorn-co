@@ -40,11 +40,16 @@ export default function Navbar() {
         {/* Logo */}
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="font-display text-xl md:text-2xl font-bold tracking-widest text-[#FAF7F2] hover:text-[#FAF7F2] transition-colors"
+          className="flex items-center"
           aria-label="Blackhorn Co. — back to top"
         >
-          BLACKHORN{' '}
-          <span className="text-[#B87333]">CO.</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/bannerlogo.jpeg"
+            alt="Blackhorn Co."
+            className="h-10 md:h-12 w-auto object-contain"
+            style={{ mixBlendMode: 'screen' }}
+          />
         </button>
 
         {/* Desktop Nav */}

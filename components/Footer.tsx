@@ -9,10 +9,14 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
           {/* Logo */}
           <div>
-            <p className="font-display text-xl font-bold tracking-widest text-[#FAF7F2]">
-              BLACKHORN <span className="text-[#B87333]">CO.</span>
-            </p>
-            <p className="font-body text-[#A8A29E] text-sm mt-1">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/logo.jpeg"
+              alt="Blackhorn Co."
+              className="h-20 w-auto object-contain"
+              style={{ mixBlendMode: 'screen' }}
+            />
+            <p className="font-body text-[#A8A29E] text-sm mt-2">
               Hand-cleaned skull art from Alberta, Canada.
             </p>
           </div>

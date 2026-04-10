@@ -46,11 +46,36 @@ export default function Hero() {
         aria-hidden="true"
       />
 
+      {/* Emblem watermark — large background element */}
+      <div
+        className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none"
+        aria-hidden="true"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/emblem.jpeg"
+          alt=""
+          className="w-[70vw] max-w-3xl opacity-[0.07]"
+          style={{ mixBlendMode: 'screen' }}
+        />
+      </div>
+
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        {/* Pre-headline tag */}
+        {/* Banner logo — centerpiece */}
+        <div className="flex justify-center mb-8">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/bannerlogo.jpeg"
+            alt="Blackhorn Co."
+            className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto"
+            style={{ mixBlendMode: 'screen' }}
+          />
+        </div>
+
+        {/* Location tag */}
         <p
-          className="font-body text-xs font-medium tracking-[0.35em] uppercase text-[#B87333] mb-8"
+          className="font-body text-xs font-medium tracking-[0.35em] uppercase text-[#B87333] mb-6"
           style={{ letterSpacing: '0.3em' }}
         >
           Alberta, Canada
@@ -60,7 +85,7 @@ export default function Hero() {
         <h1
           className="font-display font-bold text-[#FAF7F2] leading-[1.05] mb-6"
           style={{
-            fontSize: 'clamp(2.6rem, 7vw, 5.5rem)',
+            fontSize: 'clamp(2rem, 5.5vw, 4.5rem)',
             textShadow: '0 2px 40px rgba(0,0,0,0.5)',
           }}
         >

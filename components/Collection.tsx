@@ -14,30 +14,18 @@ const CATEGORIES: ('All' | ProductCategory)[] = [
   'Other',
 ]
 
-// Placeholder skull SVG used when no product image is provided
+// Placeholder shown when no product photo has been added yet
 function SkullPlaceholder() {
   return (
-    <div className="w-full h-full flex items-center justify-center">
-      <svg
-        viewBox="0 0 80 80"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-16 h-16 opacity-20"
+    <div className="w-full h-full flex items-center justify-center bg-[#111]">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/images/emblem.jpeg"
+        alt=""
         aria-hidden="true"
-      >
-        <path
-          d="M40 8C24 8 14 20 14 33c0 8 4 14 10 18v8h32v-8c6-4 10-10 10-18C66 20 56 8 40 8z"
-          stroke="#B87333"
-          strokeWidth="2"
-          fill="none"
-        />
-        <circle cx="30" cy="30" r="5" fill="#B87333" opacity="0.5" />
-        <circle cx="50" cy="30" r="5" fill="#B87333" opacity="0.5" />
-        <path d="M34 55v4M40 55v6M46 55v4" stroke="#B87333" strokeWidth="1.5" strokeLinecap="round" />
-        {/* Horns */}
-        <path d="M20 28 C10 20, 4 8, 12 4" stroke="#B87333" strokeWidth="2" fill="none" strokeLinecap="round" />
-        <path d="M60 28 C70 20, 76 8, 68 4" stroke="#B87333" strokeWidth="2" fill="none" strokeLinecap="round" />
-      </svg>
+        className="w-3/5 h-3/5 object-contain opacity-30"
+        style={{ mixBlendMode: 'screen' }}
+      />
     </div>
   )
 }
