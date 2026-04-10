@@ -1,10 +1,10 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Mail } from 'lucide-react'
-import { products, type ProductCategory } from '../data/products'
+import { Mail, Paintbrush } from 'lucide-react'
+import { products, type ProductCategory, type ProductFinish } from '../data/products'
 
-const CATEGORIES: ('All' | ProductCategory)[] = [
+const ANIMAL_FILTERS: ('All' | ProductCategory)[] = [
   'All',
   'Longhorn',
   'Bison',
@@ -13,6 +13,14 @@ const CATEGORIES: ('All' | ProductCategory)[] = [
   'Small Skulls',
   'Other',
 ]
+
+const FINISH_FILTERS: ('All' | ProductFinish)[] = ['All', 'natural', 'painted']
+
+const FINISH_LABELS: Record<'All' | ProductFinish, string> = {
+  All: 'All Finishes',
+  natural: 'Natural Bone',
+  painted: 'Artist Painted',
+}
 
 // Placeholder shown when no product photo has been added yet
 function SkullPlaceholder() {
@@ -30,35 +38,34 @@ function SkullPlaceholder() {
 }
 
 export default function Collection() {
-  const [activeFilter, setActiveFilter] = useState<'All' | ProductCategory>('All')
+  const [activeAnimal, setActiveAnimal] = useState<'All' | ProductCategory>('All')
+  const [activeFinish, setActiveFinish] = useState<'All' | ProductFinish>('All')
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible')
-          }
+          if (entry.isIntersecting) entry.target.classList.add('visible')
         })
       },
       { threshold: 0.1 }
     )
-
     const revealEls = sectionRef.current?.querySelectorAll('.reveal')
     revealEls?.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
   }, [])
 
-  const filtered =
-    activeFilter === 'All'
-      ? products
-      : products.filter((p) => p.category === activeFilter)
+  const filtered = products.filter((p) => {
+    const animalMatch = activeAnimal === 'All' || p.category === activeAnimal
+    const finishMatch = activeFinish === 'All' || p.finish === activeFinish
+    return animalMatch && finishMatch
+  })
 
-  const handleInquire = (productName: string) => {
+  const handleInquire = (productName: string, finish: ProductFinish) => {
     const subject = encodeURIComponent(`Inquiry: ${productName}`)
     const body = encodeURIComponent(
-      `Hi Blackhorn Co.,\n\nI'm interested in "${productName}" from your collection. Could you provide more details or confirm availability?\n\nThank you!`
+      `Hi Blackhorn Co.,\n\nI'm interested in "${productName}" (${finish === 'natural' ? 'Natural Bone' : 'Artist Painted'}) from your collection. Could you confirm availability and provide details?\n\nThank you!`
     )
     window.location.href = `mailto:hello@blackhornco.ca?subject=${subject}&body=${body}`
   }
@@ -68,7 +75,7 @@ export default function Collection() {
       <div className="max-w-7xl mx-auto">
 
         {/* Section Header */}
-        <div className="text-center mb-14 reveal">
+        <div className="text-center mb-10 reveal">
           <p className="font-body text-xs font-medium tracking-[0.35em] uppercase text-[#B87333] mb-4">
             Ready to Ship
           </p>
@@ -80,41 +87,112 @@ export default function Collection() {
           </h2>
           <div className="copper-divider" />
           <p className="font-body text-[#A8A29E] mt-6 max-w-lg mx-auto text-base">
-            Each piece is hand-cleaned and painted by Alberta-based artists.
-            No two are alike.
+            Hand-cleaned skulls in natural bone, and artist-painted pieces ready to ship.
+            Every one sourced and prepared in Alberta.
           </p>
         </div>
 
-        {/* Filter Bar */}
-        <div className="flex flex-wrap gap-2 justify-center mb-12 reveal">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveFilter(cat)}
-              className={`font-body text-xs font-medium tracking-widest uppercase px-5 py-2.5 transition-all duration-200 border ${
-                activeFilter === cat
-                  ? 'bg-[#B87333] border-[#B87333] text-[#0F0F0F]'
-                  : 'border-[#242424] text-[#A8A29E] hover:border-[#B87333]/50 hover:text-[#FAF7F2] bg-transparent'
-              }`}
-              style={{ letterSpacing: '0.12em' }}
+        {/* ── Commission Custom Artwork Banner ── */}
+        <div className="reveal mb-12">
+          <div
+            className="relative border border-[#B87333]/30 bg-[#1A1A1A] overflow-hidden px-6 py-7 md:px-10 md:py-8 flex flex-col sm:flex-row items-center justify-between gap-6"
+          >
+            {/* Copper glow */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  'radial-gradient(ellipse at 0% 50%, rgba(184,115,51,0.08) 0%, transparent 60%)',
+              }}
+              aria-hidden="true"
+            />
+
+            <div className="relative z-10 flex items-start gap-5">
+              <div className="w-11 h-11 border border-[#B87333]/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <Paintbrush size={18} className="text-[#B87333]" strokeWidth={1.5} />
+              </div>
+              <div>
+                <p className="font-display font-semibold text-[#FAF7F2] text-xl mb-1">
+                  Commission Custom Artwork
+                </p>
+                <p className="font-body text-[#A8A29E] text-sm leading-relaxed max-w-lg">
+                  Want something truly one-of-a-kind? We work with Alberta&apos;s finest artists
+                  to hand-paint any skull to your vision. Starting at{' '}
+                  <span className="text-[#B87333]">$350 CAD</span> for painting, plus the skull.
+                </p>
+              </div>
+            </div>
+
+            <a
+              href="mailto:hello@blackhornco.ca?subject=Custom%20Artwork%20Commission&body=Hi%20Blackhorn%20Co.%2C%0A%0AI%27d%20like%20to%20commission%20a%20custom%20painted%20skull.%20Here%27s%20what%20I%27m%20thinking%3A%0A%0ASpecies%2FType%3A%20%0ADesign%20ideas%2Freferences%3A%20%0ABudget%3A%20%0A%0AThanks!"
+              className="relative z-10 flex-shrink-0 px-7 py-3.5 bg-[#B87333] hover:bg-[#D4894A] text-[#0F0F0F] font-body font-semibold text-xs tracking-widest uppercase transition-all duration-200 whitespace-nowrap"
+              style={{ letterSpacing: '0.15em' }}
             >
-              {cat}
-            </button>
-          ))}
+              Start a Commission
+            </a>
+          </div>
+        </div>
+
+        {/* ── Filters ── */}
+        <div className="reveal mb-10 space-y-3">
+          {/* Finish filter */}
+          <div className="flex flex-wrap gap-2 items-center">
+            <span className="font-body text-[10px] uppercase tracking-widest text-[#A8A29E]/50 w-full sm:w-auto sm:mr-2">
+              Finish
+            </span>
+            {FINISH_FILTERS.map((f) => (
+              <button
+                key={f}
+                onClick={() => setActiveFinish(f)}
+                className={`font-body text-xs font-medium tracking-widest uppercase px-4 py-2 transition-all duration-200 border ${
+                  activeFinish === f
+                    ? f === 'natural'
+                      ? 'bg-[#D4C5A9] border-[#D4C5A9] text-[#0F0F0F]'
+                      : 'bg-[#B87333] border-[#B87333] text-[#0F0F0F]'
+                    : 'border-[#242424] text-[#A8A29E] hover:border-[#B87333]/50 hover:text-[#FAF7F2] bg-transparent'
+                }`}
+                style={{ letterSpacing: '0.12em' }}
+              >
+                {FINISH_LABELS[f]}
+              </button>
+            ))}
+          </div>
+
+          {/* Animal filter */}
+          <div className="flex flex-wrap gap-2 items-center">
+            <span className="font-body text-[10px] uppercase tracking-widest text-[#A8A29E]/50 w-full sm:w-auto sm:mr-2">
+              Species
+            </span>
+            {ANIMAL_FILTERS.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveAnimal(cat)}
+                className={`font-body text-xs font-medium tracking-widest uppercase px-4 py-2 transition-all duration-200 border ${
+                  activeAnimal === cat
+                    ? 'bg-[#B87333] border-[#B87333] text-[#0F0F0F]'
+                    : 'border-[#242424] text-[#A8A29E] hover:border-[#B87333]/50 hover:text-[#FAF7F2] bg-transparent'
+                }`}
+                style={{ letterSpacing: '0.12em' }}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Product Grid */}
         {filtered.length === 0 ? (
-          <p className="text-center text-[#A8A29E] font-body py-16">
-            No pieces in this category right now — check back soon or{' '}
-            <a
-              href="mailto:hello@blackhornco.ca?subject=Custom%20Order%20Inquiry"
-              className="text-[#B87333] hover:text-[#D4894A] underline"
+          <div className="text-center py-20">
+            <p className="font-body text-[#A8A29E] mb-4">
+              No pieces match that combination right now.
+            </p>
+            <button
+              onClick={() => { setActiveAnimal('All'); setActiveFinish('All') }}
+              className="font-body text-xs text-[#B87333] hover:text-[#D4894A] underline uppercase tracking-widest transition-colors"
             >
-              request a custom order
-            </a>
-            .
-          </p>
+              Clear filters
+            </button>
+          </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((product, index) => (
@@ -140,16 +218,16 @@ export default function Collection() {
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={product.image}
-                      alt={`${product.name} — ${product.category} skull art by Blackhorn Co.`}
+                      alt={`${product.name} — ${product.category} skull by Blackhorn Co.`}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                    <div className="w-full h-full transition-transform duration-500 group-hover:scale-105">
                       <SkullPlaceholder />
                     </div>
                   )}
 
-                  {/* Sold badge */}
+                  {/* Sold overlay */}
                   {product.status === 'sold' && (
                     <div className="absolute inset-0 bg-[#0F0F0F]/70 flex items-center justify-center">
                       <span className="font-display text-2xl font-bold text-[#FAF7F2]/60 rotate-[-20deg] border-2 border-[#FAF7F2]/30 px-4 py-1 tracking-widest">
@@ -158,11 +236,24 @@ export default function Collection() {
                     </div>
                   )}
 
-                  {/* Category tag overlay */}
+                  {/* Top-left: species tag */}
                   <div className="absolute top-3 left-3">
                     <span className="font-body text-[10px] font-semibold tracking-widest uppercase bg-[#0F0F0F]/80 text-[#B87333] px-2.5 py-1">
                       {product.category}
                     </span>
+                  </div>
+
+                  {/* Top-right: finish badge */}
+                  <div className="absolute top-3 right-3">
+                    {product.finish === 'painted' ? (
+                      <span className="font-body text-[10px] font-semibold tracking-widest uppercase bg-[#B87333] text-[#0F0F0F] px-2.5 py-1">
+                        Painted
+                      </span>
+                    ) : (
+                      <span className="font-body text-[10px] font-semibold tracking-widest uppercase bg-[#0F0F0F]/80 text-[#D4C5A9] border border-[#D4C5A9]/30 px-2.5 py-1">
+                        Natural
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -182,8 +273,8 @@ export default function Collection() {
 
                     {product.status === 'available' ? (
                       <button
-                        onClick={() => handleInquire(product.name)}
-                        className="group/btn flex items-center gap-2 px-4 py-2 bg-transparent border border-[#B87333]/50 text-[#B87333] hover:bg-[#B87333] hover:text-[#0F0F0F] hover:border-[#B87333] font-body text-xs font-semibold tracking-widest uppercase transition-all duration-200"
+                        onClick={() => handleInquire(product.name, product.finish)}
+                        className="flex items-center gap-2 px-4 py-2 bg-transparent border border-[#B87333]/50 text-[#B87333] hover:bg-[#B87333] hover:text-[#0F0F0F] hover:border-[#B87333] font-body text-xs font-semibold tracking-widest uppercase transition-all duration-200"
                         style={{ letterSpacing: '0.12em' }}
                         aria-label={`Inquire about ${product.name}`}
                       >
@@ -201,20 +292,6 @@ export default function Collection() {
             ))}
           </div>
         )}
-
-        {/* Bottom CTA */}
-        <div className="text-center mt-16 reveal">
-          <p className="font-body text-[#A8A29E] mb-4 text-sm">
-            Don&apos;t see exactly what you&apos;re looking for?
-          </p>
-          <a
-            href="mailto:hello@blackhornco.ca?subject=Custom%20Order%20Inquiry&body=Hi%20Blackhorn%20Co.%2C%0A%0AI%27m%20interested%20in%20a%20custom%20piece.%20Could%20you%20tell%20me%20more%20about%20the%20commission%20process%3F"
-            className="inline-block px-8 py-3.5 border border-[#B87333]/40 text-[#B87333] hover:bg-[#B87333]/10 font-body text-xs font-semibold tracking-widest uppercase transition-all duration-200"
-            style={{ letterSpacing: '0.15em' }}
-          >
-            Request a Custom Piece
-          </a>
-        </div>
       </div>
     </section>
   )
