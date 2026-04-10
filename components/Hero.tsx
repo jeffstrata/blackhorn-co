@@ -104,11 +104,11 @@ export default function Hero() {
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-2">
           <button
             onClick={scrollToCollection}
-            className="group relative px-8 py-4 bg-[#B87333] hover:bg-[#D4894A] text-[#0F0F0F] font-body font-semibold text-sm tracking-widest uppercase transition-all duration-200 overflow-hidden"
-            style={{ letterSpacing: '0.15em' }}
+            className="group relative px-10 py-5 bg-[#B87333] hover:bg-[#D4894A] text-[#0F0F0F] font-body font-bold text-base tracking-widest uppercase transition-all duration-200 overflow-hidden shadow-lg"
+            style={{ letterSpacing: '0.18em', minWidth: '220px' }}
           >
             <span className="relative z-10">Browse Collection</span>
             <span className="absolute inset-0 bg-[#D4894A] translate-y-full group-hover:translate-y-0 transition-transform duration-200" />
@@ -119,8 +119,8 @@ export default function Hero() {
               const el = document.querySelector('#custom-orders')
               if (el) el.scrollIntoView({ behavior: 'smooth' })
             }}
-            className="px-8 py-4 border border-[#B87333]/40 text-[#FAF7F2] hover:border-[#B87333] font-body font-medium text-sm tracking-widest uppercase transition-all duration-200"
-            style={{ letterSpacing: '0.15em' }}
+            className="px-10 py-5 border-2 border-[#FAF7F2] text-[#FAF7F2] hover:bg-[#FAF7F2] hover:text-[#0F0F0F] font-body font-bold text-base tracking-widest uppercase transition-all duration-200"
+            style={{ letterSpacing: '0.18em', minWidth: '220px' }}
           >
             Custom Orders
           </button>
