@@ -37,9 +37,12 @@ function SkullPlaceholder() {
   )
 }
 
+const PAGE_SIZE = 15
+
 export default function Collection() {
   const [activeAnimal, setActiveAnimal] = useState<'All' | ProductCategory>('All')
   const [activeFinish, setActiveFinish] = useState<'All' | ProductFinish>('All')
+  const [currentPage, setCurrentPage] = useState(1)
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -61,6 +64,20 @@ export default function Collection() {
     const finishMatch = activeFinish === 'All' || p.finish === activeFinish
     return animalMatch && finishMatch
   })
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
+  const paginated = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+
+  const handleFilterChange = (setter: (v: never) => void, value: never) => {
+    setter(value)
+    setCurrentPage(1)
+  }
+
+  const goToPage = (page: number) => {
+    setCurrentPage(page)
+    const el = document.querySelector('#collection')
+    if (el) el.scrollIntoView({ behavior: 'smooth' })
+  }
 
   const handleInquire = (productName: string, finish: ProductFinish) => {
     const subject = encodeURIComponent(`Inquiry: ${productName}`)
@@ -143,7 +160,7 @@ export default function Collection() {
             {FINISH_FILTERS.map((f) => (
               <button
                 key={f}
-                onClick={() => setActiveFinish(f)}
+                onClick={() => handleFilterChange(setActiveFinish as (v: never) => void, f as never)}
                 className={`font-body text-xs font-medium tracking-widest uppercase px-4 py-2 transition-all duration-200 border ${
                   activeFinish === f
                     ? f === 'natural'
@@ -166,7 +183,7 @@ export default function Collection() {
             {ANIMAL_FILTERS.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setActiveAnimal(cat)}
+                onClick={() => handleFilterChange(setActiveAnimal as (v: never) => void, cat as never)}
                 className={`font-body text-xs font-medium tracking-widest uppercase px-4 py-2 transition-all duration-200 border ${
                   activeAnimal === cat
                     ? 'bg-[#B87333] border-[#B87333] text-[#0F0F0F]'
@@ -195,7 +212,7 @@ export default function Collection() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((product, index) => (
+            {paginated.map((product, index) => (
               <article
                 key={product.id}
                 className="reveal group relative bg-[#1A1A1A] border border-[#242424] overflow-hidden transition-all duration-300 hover:border-[#B87333]/40"
@@ -290,6 +307,41 @@ export default function Collection() {
                 </div>
               </article>
             ))}
+          </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-1 mt-12">
+            <button
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-3 py-2 font-body text-sm text-[#A8A29E] hover:text-[#FAF7F2] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
+              ‹ Prev
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => goToPage(page)}
+                className={`w-9 h-9 font-body text-sm font-medium transition-all duration-200 ${
+                  page === currentPage
+                    ? 'bg-[#B87333] text-[#0F0F0F]'
+                    : 'text-[#A8A29E] hover:text-[#FAF7F2] hover:bg-[#1A1A1A]'
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+
+            <button
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-3 py-2 font-body text-sm text-[#A8A29E] hover:text-[#FAF7F2] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
+              Next ›
+            </button>
           </div>
         )}
       </div>
